@@ -1,1 +1,0 @@
-# Fortran_aprox_function_with_grad
