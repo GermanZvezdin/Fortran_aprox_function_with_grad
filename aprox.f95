@@ -7,16 +7,15 @@ program main
   integer :: n, m, n0, i
   !---------------------------end-var----------------------------------------------------------
   read(*, *) n, c, d, n0 
-  m = 2
+  m = 3
   n0 = n0 + 1
-  allocate(a(1:n0))
-  allocate(res(1:n0))
-  res(:) = dble(2.123)
-  print *, res
-  !x =F(a, c, d,n0, n)
+  allocate(a(1:(n0+m)))
+  allocate(res(1:(n0+m)))
   a(:) = 0.0
-  call aprox(a, c, d, n, n0, dble(0.0001), res)
-  print *, res
+  do i=n0,n0+m
+	call aprox(a, c, d, n, i, dble(0.0001), res)
+	print *, i-1, 'res=',res
+  end do
   stop
 end program main
 
@@ -41,7 +40,7 @@ end subroutine grad
 function y(x)
 	real(8), intent(in) :: x
 	real(8) :: y
-	y = cos(x / 10) * atan(x)
+	y = cos(x/10)*atan(x)
 	return 
 end function y
 function norm(x, n)
@@ -74,7 +73,7 @@ function F(a, c, d, n, k)
 	real(8) :: y, p, x, F
 	integer :: i
 	x = c
-	print *, x
+	!print *, x
 	F = 0.0
 	do i=1, k + 1, 1
 		F = F + (y(x) - p(a, x, n)) ** 2
@@ -129,7 +128,7 @@ subroutine aprox(cur_a, c, d, k, n, eps, res)
 		v = -cur_grad + betta * v
 		delta = del(cur_a, old_a, n)
 		j = j + 1
-		print *, norm(cur_grad, n)
+		!print *, norm(cur_grad, n)
 	end do
 	print *, 'Iter', j 
 	res = cur_a
